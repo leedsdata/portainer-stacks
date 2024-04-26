@@ -19,7 +19,7 @@ services:
         loki-url: "http://loki:3100/loki/api/v1/push"
 
   mariadb:
-    image: mariadb:latest
+    image: mariadb:10.11.2
     volumes:
       - /docker/mariadb/data:/var/lib/mysql
       - /docker/mariadb/conf:/etc/mysql/conf.d
