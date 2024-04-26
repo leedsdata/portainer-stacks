@@ -1,0 +1,99 @@
+version: '3.7'
+
+services:
+  homeassistant:
+    image: homeassistant/home-assistant:stable
+    volumes:
+      - /docker/homeassistant/config:/config
+    ports:
+      - "8123:8123"
+    environment:
+      TZ: ${TZ}
+    restart: unless-stopped
+    networks:
+      - external
+      - internal
+    logging:
+      driver: loki
+      options:
+        loki-url: "http://loki:3100/loki/api/v1/push"
+
+  mariadb:
+    image: mariadb:latest
+    volumes:
+      - /docker/mariadb/data:/var/lib/mysql
+      - /docker/mariadb/conf:/etc/mysql/conf.d
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      TZ: ${TZ}
+    restart: unless-stopped
+    networks:
+      - internal
+    logging:
+      driver: loki
+      options:
+        loki-url: "http://loki:3100/loki/api/v1/push"
+
+  mosquitto:
+    image: eclipse-mosquitto:latest
+    volumes:
+      - /docker/mosquitto/config:/mosquitto/config
+      - /docker/mosquitto/data:/mosquitto/data
+      - /docker/mosquitto/log:/mosquitto/log
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    environment:
+      TZ: ${TZ}
+    restart: unless-stopped
+    networks:
+      - external
+    logging:
+      driver: loki
+      options:
+        loki-url: "http://loki:3100/loki/api/v1/push"
+
+  node-red:
+    image: nodered/node-red:latest
+    volumes:
+      - /docker/node-red/data:/data
+    ports:
+      - "1880:1880"
+    environment:
+      TZ: ${TZ}
+    restart: unless-stopped
+    networks:
+      - external
+    logging:
+      driver: loki
+      options:
+        loki-url: "http://loki:3100/loki/api/v1/push"
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: mariadb
+      PMA_USER: ${MYSQL_USER}
+      PMA_PASSWORD: ${PMA_PASSWORD}
+      TZ: ${TZ}
+    restart: unless-stopped
+    networks:
+      - external
+      - internal
+    depends_on:
+      - mariadb
+    logging:
+      driver: loki
+      options:
+        loki-url: "http://loki:3100/loki/api/v1/push"
+
+networks:
+  external:
+    driver: bridge
+  internal:
+    driver: bridge
