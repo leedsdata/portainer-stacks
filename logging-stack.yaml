@@ -6,17 +6,23 @@ services:
     ports:
       - "3100:3100"
     volumes:
-      - loki_data:/data
+      - /docker/loki:/data
 
   grafana:
     image: grafana/grafana:latest
+    volumes:
+      - /docker/grafana/data:/var/lib/grafana
+      - /docker/grafana/config:/etc/grafana
+      - /docker/grafana/logs:/var/log/grafana
+      - /docker/grafana/plugins:/var/lib/grafana/plugins
     ports:
       - "3000:3000"
     depends_on:
       - loki
-    volumes:
-      - grafana_data:/var/lib/grafana
-
-volumes:
-  loki_data:
-  grafana_data:
+    environment:
+      GF_PATHS_CONFIG: "/docker/grafana/config/grafana.ini"
+      GF_PATHS_DATA: "/docker/grafana/data"
+      GF_PATHS_HOME: "/usr/share/grafana"
+      GF_PATHS_LOGS: "/docker/grafana/logs"
+      GF_PATHS_PLUGINS: "/docker/grafana/plugins"
+      GF_PATHS_PROVISIONING: "/docker/grafana/config/provisioning"
