@@ -14,9 +14,10 @@ services:
       - external
       - internal
     logging:
-      driver: loki
+      driver: syslog
       options:
-        loki-url: "http://loki:3100/loki/api/v1/push"
+        syslog-address: "udp://192.168.1.141:514"
+        tag: "homeassistant"
 
   mariadb:
     image: mariadb:10.11.2-jammy
@@ -32,9 +33,10 @@ services:
     networks:
       - internal
     logging:
-      driver: loki
+      driver: syslog
       options:
-        loki-url: "http://loki:3100/loki/api/v1/push"
+        syslog-address: "udp://192.168.1.141:514"
+        tag: "mariadb"
 
   mosquitto:
     image: eclipse-mosquitto:latest
@@ -51,9 +53,10 @@ services:
     networks:
       - external
     logging:
-      driver: loki
+      driver: syslog
       options:
-        loki-url: "http://loki:3100/loki/api/v1/push"
+        syslog-address: "udp://192.168.1.141:514"
+        tag: "mosquitto"
 
   node-red:
     image: nodered/node-red:latest
@@ -67,9 +70,10 @@ services:
     networks:
       - external
     logging:
-      driver: loki
+      driver: syslog
       options:
-        loki-url: "http://loki:3100/loki/api/v1/push"
+        syslog-address: "udp://192.168.1.141:514"
+        tag: "node-red"
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -87,9 +91,10 @@ services:
     depends_on:
       - mariadb
     logging:
-      driver: loki
+      driver: syslog
       options:
-        loki-url: "http://loki:3100/loki/api/v1/push"
+        syslog-address: "udp://192.168.1.141:514"
+        tag: "phpmyadmin"
 
 networks:
   external:
