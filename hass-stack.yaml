@@ -24,10 +24,9 @@ services:
       - /docker/mariadb/data:/var/lib/mysql
       - /docker/mariadb/conf:/etc/mysql/conf.d
     environment:
-    MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
-    MARIADB_DATABASE: ${MARIADB_DATABASE}
-    MARIADB_USER: ${MARIADB_USER}
-    MARIADB_PASSWORD: ${MARIADB_PASSWORD}
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
+      MARIADB_USER: ${MARIADB_USER}
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD}
       TZ: ${TZ}
     restart: unless-stopped
     networks:
@@ -78,7 +77,7 @@ services:
       - "8080:80"
     environment:
       PMA_HOST: mariadb
-      PMA_USER: ${MARIADB_USER}
+      PMA_USER: ${PMA_USER}
       PMA_PASSWORD: ${PMA_PASSWORD}
       TZ: ${TZ}
     restart: unless-stopped
