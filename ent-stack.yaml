@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  plex:
+    image: plexinc/pms-docker
+    container_name: plex
+    network_mode: bridge
+    environment:
+      - TZ=Europe/London
+    ports:
+      - "32400:32400"
+      - "3005:3005"
+      - "8324:8324"
+      - "32469:32469"
+      - "1900:1900/udp"
+      - "32410:32410/udp"
+      - "32412:32412/udp"
+      - "32413:32413/udp"
+      - "32414:32414/udp"
+    volumes:
+      - /docker/plex/config:/config
+      - /docker/plex/media:/media
+    restart: unless-stopped
+
+  sonarr:
+    image: linuxserver/sonarr
+    container_name: sonarr
+    network_mode: bridge
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+    ports:
+      - "8989:8989"
+    volumes:
+      - /docker/sonarr/config:/config
+      - /docker/sonarr/tv:/tv
+      - /docker/sonarr/downloads:/downloads
+    restart: unless-stopped
+
+  radarr:
+    image: linuxserver/radarr
+    container_name: radarr
+    network_mode: bridge
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+    ports:
+      - "7878:7878"
+    volumes:
+      - /docker/radarr/config:/config
+      - /docker/radarr/movies:/movies
+      - /docker/radarr/downloads:/downloads
+    restart: unless-stopped
