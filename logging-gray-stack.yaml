@@ -32,7 +32,7 @@ services:
       - "9200:9200/tcp"
       - "9300:9300/tcp"
     volumes:
-      - "graylog-datanode:/var/lib/graylog-datanode"
+      - /docker/graylog/datanode:/var/lib/graylog-datanode"
     restart: "on-failure"
 
   graylog:
@@ -63,12 +63,6 @@ services:
     - "13301:13301/tcp" # Forwarder data
     - "13302:13302/tcp" # Forwarder config
     volumes:
-      - "graylog_data:/usr/share/graylog/data/data"
-      - "graylog_journal:/usr/share/graylog/data/journal"
+      - /docker/graylog/data:/usr/share/graylog/data/data"
+      - /docker/graylog/journal:/usr/share/graylog/data/journal"
     restart: "on-failure"
-
-volumes:
-  mongodb_data:
-  graylog-datanode:
-  graylog_data:
-  graylog_journal:
