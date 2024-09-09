@@ -78,6 +78,8 @@ services:
   phpmyadmin:
     image: bitnami/phpmyadmin:latest
     platform: linux/arm64
+    volumes:
+      - /docker/phpmyadmin/httpd.conf:/opt/bitnami/apache/conf/httpd.conf
     ports:
       - "8088:80"
     environment:
