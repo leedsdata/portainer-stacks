@@ -76,7 +76,7 @@ services:
         tag: "node-red"
 
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin
+    image: bitnami/phpmyadmin:latest
     platform: linux/arm64
     ports:
       - "8080:80"
