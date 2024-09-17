@@ -24,8 +24,8 @@ services:
   mariadb:
     image: mariadb:10.11.2-jammy
     volumes:
-      - /mariadb/data:/var/lib/mysql
-      - /mariadb/conf:/etc/mysql/conf.d
+      - /mariadb/mariadb/data:/var/lib/mysql
+      - /mariadb/mariadb/conf:/etc/mysql/conf.d
     environment:
       MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
       MARIADB_USER: ${MARIADB_USER}
