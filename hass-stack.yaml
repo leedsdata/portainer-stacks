@@ -13,6 +13,8 @@ services:
     networks:
       - external
       - internal
+    depends_on:
+      - mariadb
     logging:
       driver: syslog
       options:
@@ -22,8 +24,8 @@ services:
   mariadb:
     image: mariadb:10.11.2-jammy
     volumes:
-      - /docker/mariadb/data:/var/lib/mysql
-      - /docker/mariadb/conf:/etc/mysql/conf.d
+      - /mariadb/data:/var/lib/mysql
+      - /mariadb/conf:/etc/mysql/conf.d
     environment:
       MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
       MARIADB_USER: ${MARIADB_USER}
