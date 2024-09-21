@@ -22,7 +22,7 @@ services:
         tag: "homeassistant"
 
   mariadb:
-    image: mariadb:10.11.2-jammy
+    image: mariadb:latest
     volumes:
       - /mariadb/mariadb/data:/var/lib/mysql
       - /mariadb/mariadb/conf:/etc/mysql/conf.d
