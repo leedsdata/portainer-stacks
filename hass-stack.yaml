@@ -101,6 +101,21 @@ services:
         syslog-address: "udp://192.168.1.141:514"
         tag: "phpmyadmin"
 
+  unifi-protect-downloader:
+    image: unifitoolbox/protect-archiver:latest
+    container_name: unifi_protect_downloader
+    volumes:
+      - /surveillance/unifi:/downloads
+    environment:
+      - ADDRESS=unifi.local  # Replace with your UniFi Protect IP/hostname
+      - USERNAME=${ui_uname}  # Replace with your UniFi Protect username
+      - PASSWORD=${ui_pass}  # Replace with your UniFi Protect password
+      - VERIFY_SSL=false
+      - CAMERAS=all  # Replace with specific camera IDs if needed
+      - EVENTS_ONLY=true  # This option tells the downloader to download motion events only
+      - USE_SUBFOLDERS=true
+    restart: unless-stopped
+
 networks:
   external:
     driver: bridge
