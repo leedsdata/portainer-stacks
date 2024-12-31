@@ -60,22 +60,22 @@ services:
         syslog-address: "udp://192.168.1.141:514"
         tag: "mosquitto"
 
-  node-red:
-    image: nodered/node-red:latest
-    volumes:
-      - /docker/node-red/data:/data
-    ports:
-      - "1880:1880"
-    environment:
-      TZ: ${TZ}
-    restart: unless-stopped
-    networks:
-      - external
-    logging:
-      driver: syslog
-      options:
-        syslog-address: "udp://192.168.1.141:514"
-        tag: "node-red"
+#  node-red:
+#    image: nodered/node-red:latest
+#    volumes:
+#      - /docker/node-red/data:/data
+#    ports:
+#      - "1880:1880"
+#    environment:
+#      TZ: ${TZ}
+#    restart: unless-stopped
+#    networks:
+#      - external
+#    logging:
+#      driver: syslog
+#      options:
+#        syslog-address: "udp://192.168.1.141:514"
+#        tag: "node-red"
 
   phpmyadmin:
     image: bitnami/phpmyadmin:latest
