@@ -4,6 +4,7 @@ services:
   tts:
     image: ghcr.io/coqui-ai/tts:latest
     container_name: coqui-tts
+    platform: linux/arm64
     ports:
       - 5002:5002
     environment:
@@ -17,6 +18,7 @@ services:
   stt:
     image: lscr.io/linuxserver/faster-whisper:latest
     container_name: faster-whisper
+    platform: linux/arm64
     ports:
       - 10300:10300
     environment:
