@@ -1,0 +1,30 @@
+version: "3.7"
+
+services:
+  tts:
+    image: ghcr.io/coqui-ai/tts:latest
+    container_name: coqui-tts
+    ports:
+      - 5002:5002
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+    volumes:
+      - /docker/tts:/config
+    restart: unless-stopped
+
+  stt:
+    image: lscr.io/linuxserver/faster-whisper:latest
+    container_name: faster-whisper
+    ports:
+      - 10300:10300
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+      - WHISPER_MODEL=tiny-int8
+      - WHISPER_LANG=en
+    volumes:
+      - /docker/stt:/config
+    restart: unless-stopped
