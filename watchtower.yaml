@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  watchtower:
+    image: containrrr/watchtower:latest
+    container_name: watchtower
+    restart: unless-stopped
+    environment:
+      - TZ=Europe/London
+
+      # --- Behaviour ---
+      # Run nightly at 03:00 (cron: sec min hour day month weekday)
+      - WATCHTOWER_SCHEDULE=0 0 3 * * *
+      - WATCHTOWER_CLEANUP=true
+      - WATCHTOWER_LABEL_ENABLE=true          # only touch containers you opt-in with a label
+      - WATCHTOWER_ROLLING_RESTART=true
+      - WATCHTOWER_INCLUDE_RESTARTING=true
+      - WATCHTOWER_NO_STARTUP_MESSAGE=true
+
+      # --- Notifications via Shoutrrr ---
+      - WATCHTOWER_NOTIFICATIONS=shoutrrr
+      # You can provide one or multiple URLs, space-separated
+      # (put secrets in Portainer's "Env" UI rather than in the stack text)
+      - WATCHTOWER_NOTIFICATION_URLS=${SHOUTRRR_URLS}
+
+      # Optional niceties
+      - WATCHTOWER_NOTIFICATION_TITLE=Watchtower (home)
+      # Minimal template example (leave out to use default)
+      # - WATCHTOWER_NOTIFICATION_TEMPLATE={{.Time}} {{.Level}} {{.Event}} {{.ContainerName}} -> {{.NewImage}}
+
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+    # Use the cron schedule above (disable interval polling)
+    command: --interval 0 --stop-timeout 60s
