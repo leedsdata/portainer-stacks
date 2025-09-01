@@ -20,8 +20,6 @@ services:
       options:
         syslog-address: "udp://192.168.1.141:514"
         tag: "homeassistant"
-    labels:
-      - com.centurylinklabs.watchtower.enable=true
 
   mariadb:
     image: mariadb:latest
@@ -117,6 +115,34 @@ services:
       - EVENTS_ONLY=true  # This option tells the downloader to download motion events only
       - USE_SUBFOLDERS=true
     restart: unless-stopped
+    logging:
+      driver: syslog
+      options:
+        syslog-address: "udp://192.168.1.141:514"
+        tag: "unifi-protect-downloader"
+
+  diyhue:
+    image: diyhue/core:latest
+    container_name: diyhue
+    restart: unless-stopped
+    # Host networking ensures SSDP/UPnP discovery so the Hue app finds the bridge reliably.
+    network_mode: host
+    environment:
+      TZ: ${TZ}
+      # Since mosquitto publishes 1883 on the host, use localhost here.
+      MQTT_SERVER: mqtt://127.0.0.1:1883
+      # If you enforce auth on Mosquitto, set these env vars in your stack/Portainer:
+      # MQTT_USER: ${MQTT_USER}
+      # MQTT_PASS: ${MQTT_PASS}
+    volumes:
+      - /docker/diyhue/config:/opt/hue-emulator/config
+    depends_on:
+      - mosquitto
+    logging:
+      driver: syslog
+      options:
+        syslog-address: "udp://192.168.1.141:514"
+        tag: "diyhue"
 
 networks:
   external:
