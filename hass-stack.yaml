@@ -12,9 +12,9 @@ services:
     restart: unless-stopped
     networks:
       - external
-      - internal
     depends_on:
       - mariadb
+      - mosquitto
     logging:
       driver: syslog
       options:
@@ -33,7 +33,7 @@ services:
       TZ: ${TZ}
     restart: unless-stopped
     networks:
-      - internal
+      - external
     logging:
       driver: syslog
       options:
@@ -92,7 +92,6 @@ services:
     restart: unless-stopped
     networks:
       - external
-      - internal
     depends_on:
       - mariadb
     logging:
@@ -146,6 +145,4 @@ services:
 
 networks:
   external:
-    driver: bridge
-  internal:
     driver: bridge
