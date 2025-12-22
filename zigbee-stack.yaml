@@ -15,8 +15,3 @@ services:
       - /dev/serial/by-id/usb-ITead_Sonoff_Zigbee_3.0_USB_Dongle_Plus_ea25efbb50beed118a906c2e38a92db5-if00-port0:/dev/ttyUSB0
     networks:
       - external
-     #- Servers-VLAN 
-
-#networks:
-#  Servers-VLAN:
-#    external: true
