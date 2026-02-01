@@ -78,7 +78,7 @@ services:
 #        tag: "node-red"
 
   phpmyadmin:
-    image: image: bitnami/phpmyadmin:5
+    image: bitnami/phpmyadmin:5
     platform: linux/arm64
     volumes:
       - /docker/phpmyadmin/bitnami:/bitnami
