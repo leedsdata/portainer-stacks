@@ -1,4 +1,4 @@
-version: '3.7'
+version: "3.8"
 
 services:
   homeassistant:
@@ -13,30 +13,11 @@ services:
     networks:
       - external
     depends_on:
-      - mariadb
       - mosquitto
     logging:
       driver: syslog
       options:
         tag: "homeassistant"
-
-  mariadb:
-    image: mariadb:latest
-    volumes:
-      - /mariadb/mariadb/data:/var/lib/mysql
-      - /mariadb/mariadb/conf:/etc/mysql/conf.d
-    environment:
-      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
-      MARIADB_USER: ${MARIADB_USER}
-      MARIADB_PASSWORD: ${MARIADB_PASSWORD}
-      TZ: ${TZ}
-    restart: unless-stopped
-    networks:
-      - external
-    logging:
-      driver: syslog
-      options:
-        tag: "mariadb"
 
   mosquitto:
     image: eclipse-mosquitto:latest
@@ -57,37 +38,18 @@ services:
       options:
         tag: "mosquitto"
 
-#  node-red:
-#    image: nodered/node-red:latest
-#    volumes:
-#      - /docker/node-red/data:/data
-#    ports:
-#      - "1880:1880"
-#    environment:
-#      TZ: ${TZ}
-#    restart: unless-stopped
-#    networks:
-#      - external
-#    logging:
-#      driver: syslog
-#      options:
-#        syslog-address: "udp://192.168.1.141:514"
-#        tag: "node-red"
-
   phpmyadmin:
     image: phpmyadmin:5.2.2-apache
     ports:
       - "8088:80"
     environment:
-      PMA_HOST: mariadb
+      PMA_HOST: mariadb-clean
       PMA_USER: ${PMA_USER}
       PMA_PASSWORD: ${PMA_PASSWORD}
       TZ: ${TZ}
     restart: unless-stopped
     networks:
       - external
-    depends_on:
-      - mariadb
     logging:
       driver: syslog
       options:
@@ -99,14 +61,16 @@ services:
     volumes:
       - /surveillance/unifi:/downloads
     environment:
-      - ADDRESS=unifi.local  # Replace with your UniFi Protect IP/hostname
-      - USERNAME=${ui_uname}  # Replace with your UniFi Protect username
-      - PASSWORD=${ui_pass}  # Replace with your UniFi Protect password
+      - ADDRESS=unifi.local
+      - USERNAME=${ui_uname}
+      - PASSWORD=${ui_pass}
       - VERIFY_SSL=false
-      - CAMERAS=all  # Replace with specific camera IDs if needed
-      - EVENTS_ONLY=true  # This option tells the downloader to download motion events only
+      - CAMERAS=all
+      - EVENTS_ONLY=true
       - USE_SUBFOLDERS=true
     restart: unless-stopped
+    networks:
+      - external
     logging:
       driver: syslog
       options:
@@ -133,4 +97,5 @@ services:
 
 networks:
   external:
-    driver: bridge
+    external: true
+    name: hass-stack_external
