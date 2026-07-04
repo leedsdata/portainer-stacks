@@ -75,26 +75,7 @@ services:
       driver: syslog
       options:
         tag: "unifi-protect-downloader"
-
-  home-ui:
-    image: home-ui-home-ui:latest
-    container_name: home-ui
-    restart: unless-stopped
-    ports:
-      - "8091:80"
-    networks:
-      - external
-    healthcheck:
-      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1/ || exit 1"]
-      interval: 30s
-      timeout: 5s
-      retries: 3
-      start_period: 10s
-    logging:
-      driver: syslog
-      options:
-        tag: "home-ui"
-
+        
 networks:
   external:
     external: true
