@@ -75,12 +75,9 @@ services:
 #        tag: "node-red"
 
   phpmyadmin:
-    image: bitnami/phpmyadmin:5
-    platform: linux/arm64
-    volumes:
-      - /docker/phpmyadmin/bitnami:/bitnami
+    image: phpmyadmin:5.2.2-apache
     ports:
-      - "8088:8080"
+      - "8088:80"
     environment:
       PMA_HOST: mariadb
       PMA_USER: ${PMA_USER}
